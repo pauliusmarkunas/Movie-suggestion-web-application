@@ -146,6 +146,18 @@ header {
   line-height: 1.5;
 }
 
+.favourite-icon {
+  font-size: 2.4rem;
+  align-self: flex-end;
+  fill: none;
+  fill: red;
+}
+
+.favourite-icon:hover,
+.favourite-icon:active {
+  cursor: pointer;
+}
+
 /* movie trailer Upload page */
 
 /* media queries */
@@ -188,3 +200,5 @@ header {
     width: 100%;
   }
 }
+
+/* SECTION-UPLOAD */

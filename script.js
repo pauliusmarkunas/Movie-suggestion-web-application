@@ -69,6 +69,7 @@ const trailers = [
 const sidebarEl = document.querySelector(".sidebar");
 const sectionTrailersEl = document.querySelector(".section-trailers");
 const headerEl = document.querySelector("header");
+// const favouriteBtn = document.querySelector(".favourite-icon");
 let subList = document.querySelector(".nested-list");
 // other variables
 let activeGenre = "";
@@ -114,6 +115,9 @@ function loadContent(m) {
     <div class="about">
       ${m[4]}
     </div>
+    <ion-icon class=favourite-icon name="${
+      m[5] === true ? "heart" : "heart-outline"
+    }"></ion-icon>
   </div>`;
   sectionTrailersEl.insertAdjacentHTML("beforeend", htmlMovieContainer);
 }
@@ -200,16 +204,50 @@ sidebarEl.addEventListener("click", (e) => {
   filterContent(e);
 });
 
+document.addEventListener("click", function (e) {
+  if (e.target.classList.contains("favourite-icon")) {
+    trailers.forEach((movie) => {
+      if (
+        e.target.parentElement.querySelector(".name").textContent === movie[0]
+      ) {
+        if (!movie[5]) {
+          e.target.setAttribute("name", "heart");
+          movie[5] = true;
+        } else {
+          e.target.setAttribute("name", "heart-outline");
+          movie[5] = false;
+        }
+      }
+    });
+  }
+});
+
+// TEST
+fetch("http://localhost:3000/trailers")
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data[0]);
+  })
+  .catch((error) => {
+    console.error("Error fetching trailers:", error);
+  });
+
 // Backlog:
 // functions:
-// add save option (favourites)
-// Upload more trailers
+// change Data structure, from JS object to JSON
 
-// Next sprint:
+// Next sprints:
 // trailer upload page (form) (category selection should solve current inconvenience)
 // optimize filterContent function (using array for categories and other filters)
+// move 'trailers' object to JSON
+// implement function based on binary search for that object
 
 // SOLVED
 // issues: Keep loading movies even page is already loaded
 // breadcrumbs
 // There are no movies found in this category
+// add save option (favourites)
+// Upload more trailers
+
+// NOTES:
+// For Favourite to work I would need to create external JSON
