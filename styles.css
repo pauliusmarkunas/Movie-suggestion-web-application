@@ -24,6 +24,11 @@ body {
   align-items: center;
 }
 
+.all-categories {
+  position: sticky;
+  top: 0;
+}
+
 .sidebar li {
   font-size: 16px;
   margin-top: 24px;
@@ -115,6 +120,13 @@ header {
   /* background-color: blue; */
 }
 
+.iframe-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  background-color: #333;
+}
+
 .movie-info {
   display: flex;
   justify-content: space-between;
@@ -161,7 +173,7 @@ header {
 /* movie trailer Upload page */
 
 /* media queries */
-@media (max-width: 900px) {
+/* @media (max-width: 900px) {
   .movie-container {
     width: 100%;
   }
@@ -177,7 +189,7 @@ header {
   .section-trailers {
     margin-left: 0px;
   }
-}
+} */
 
 /* MOBILE */
 .hamburger {
@@ -202,3 +214,183 @@ header {
 }
 
 /* SECTION-UPLOAD */
+
+/* MOVIE TRAILER UPLOAD (FORM) */
+/* General form styling */
+form {
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.form-container label {
+  display: inline-block;
+  font-weight: 600;
+  color: #111;
+  margin-top: 1.2rem;
+}
+
+/* movie-form-container */
+/* .form-container {
+  margin-top: 2.4rem;
+} */
+
+/* Input fields */
+input[type="text"],
+input[type="number"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  font-size: 16px;
+  transition: border 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="number"]:focus,
+textarea:focus {
+  border-color: #007bff;
+  outline: none;
+}
+
+/* Short description (textarea) styling */
+textarea {
+  height: 150px;
+  resize: none;
+}
+
+/* Genre list styling */
+.custom-select {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+}
+
+.custom-select li {
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  margin-bottom: 5px;
+  border-radius: 8px;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+}
+
+.custom-select li:hover {
+  background-color: #f0f0f0;
+}
+
+.custom-select label {
+  display: inline-block;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  font-weight: 500;
+  letter-spacing: 3px;
+  margin-top: 0;
+}
+
+/* Checkbox styling */
+.custom-select input[type="checkbox"],
+.form-favorite input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  margin-right: 15px;
+  accent-color: #007bff;
+  cursor: pointer;
+}
+
+/* Checkbox label */
+.custom-select label,
+.form-favorite label {
+  font-size: 16px;
+  cursor: pointer;
+  color: #333;
+  margin-top: 0;
+}
+
+.custom-select input[type="checkbox"]:checked + label,
+.form-favorite input[type="checkbox"]:checked + label {
+  color: #007bff;
+  font-weight: bold;
+}
+
+/* Favorite checkbox container */
+.form-favorite {
+  display: flex;
+  align-items: center;
+  margin: 2.4rem 0;
+}
+
+/* Submit button styling */
+button[type="submit"] {
+  width: 100%;
+  padding: 10px;
+  margin: 3rem 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover,
+button[type="final-submit"]:hover {
+  background-color: #0056b3;
+}
+
+/* Add subtle shadow and border to list items */
+.custom-select li {
+  border: 1px solid #ddd;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure mobile responsiveness */
+@media (max-width: 600px) {
+  form {
+    width: 100%;
+  }
+}
+
+/* final submit Section */
+button[type="final-submit"] {
+  width: 40%;
+  padding: 10px;
+  margin: 3rem 0;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="cancel-submit"] {
+  width: 30%;
+  padding: 10px;
+  margin: 3rem 0;
+  background-color: #4a4a4a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="cancel-submit"]:hover {
+  background-color: #2d2d2d;
+}
+
+.final-submit-container {
+  display: flex;
+  justify-content: space-between;
+  width: 80%;
+}

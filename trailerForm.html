@@ -1,0 +1,103 @@
+<div class="form-container">
+  <form id="movie-form">
+    <label for="movie-name">Name of the movie:</label>
+    <input
+      type="text"
+      id="movie-name"
+      name="movie-name"
+      placeholder="Enter the movie name"
+    />
+
+    <label for="movie-year">Year of the movie:</label>
+    <input
+      type="number"
+      id="movie-year"
+      name="movie-year"
+      placeholder="Enter the release year"
+    />
+
+    <label for="form-genres">Select genres:</label>
+    <ul class="custom-select">
+      <li>
+        <input
+          type="checkbox"
+          id="action-adventure"
+          name="form-genres"
+          value="action-adventure"
+        />
+        <label for="action-adventure">Action/Adventure</label>
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          id="animation"
+          name="form-genres"
+          value="animation"
+        />
+        <label for="animation">Animation</label>
+      </li>
+      <li>
+        <input type="checkbox" id="comedy" name="form-genres" value="comedy" />
+        <label for="comedy">Comedy</label>
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          id="documentaries"
+          name="form-genres"
+          value="documentaries"
+        />
+        <label for="documentaries">Documentaries</label>
+      </li>
+      <li>
+        <input type="checkbox" id="drama" name="form-genres" value="drama" />
+        <label for="drama">Drama</label>
+      </li>
+      <li>
+        <input type="checkbox" id="horror" name="form-genres" value="horror" />
+        <label for="horror">Horror</label>
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          id="sci-fi-fantasy"
+          name="form-genres"
+          value="sci-fi-fantasy"
+        />
+        <label for="sci-fi-fantasy">Sci-Fi/Fantasy</label>
+      </li>
+      <li>
+        <input
+          type="checkbox"
+          id="list-a-z"
+          name="form-genres"
+          value="list-a-z"
+        />
+        <label for="list-a-z">List A-Z</label>
+      </li>
+    </ul>
+
+    <div class="form-favorite">
+      <input type="checkbox" id="set-favorite" name="set-favorite" />
+      <label for="set-favorite">Set as favorite</label>
+    </div>
+
+    <label for="short-description">Short description:</label>
+    <textarea
+      id="short-description"
+      name="short-description"
+      placeholder="Write a brief description..."
+      maxlength="500"
+    ></textarea>
+
+    <label for="embedded-url">embedded url (from YouTube)</label>
+    <input
+      type="text"
+      id="embedded-url"
+      name="embedded-url"
+      placeholder="YouTube Video>Share>Embed>find 'src' and paste it here"
+    />
+
+    <button type="submit">Submit</button>
+  </form>
+</div>

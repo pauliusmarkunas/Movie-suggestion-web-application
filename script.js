@@ -20,6 +20,7 @@ fetch("http://localhost:3000/trailers")
     let activeGenre = "";
     let activeSubcategory = "";
 
+    let submitData = {};
     // functions:
     function openSubcategory(e) {
       const target = e.target;
@@ -42,6 +43,7 @@ fetch("http://localhost:3000/trailers")
     <div class="name">${m.title}</div>
       <div class="year">${m.year}</div>
     </div>
+    <div class='iframe-container'>
     <iframe
       width="560"
       height="315"
@@ -52,6 +54,7 @@ fetch("http://localhost:3000/trailers")
       referrerpolicy="strict-origin-when-cross-origin"
       allowfullscreen
       ></iframe>
+      </div>
     <div class="about">
     ${m.description}
     </div>
@@ -62,6 +65,31 @@ fetch("http://localhost:3000/trailers")
       sectionTrailersEl.insertAdjacentHTML("beforeend", htmlMovieContainer);
     }
 
+    // TEST DATA (htmlMovieContainer)
+    /* <div class="movie-container">
+    <div class="movie-info">
+    <div class="name">${m.title}</div>
+      <div class="year">${m.year}</div>
+    </div>
+    <div class='iframe-container'>
+    <iframe
+      width="560"
+      height="315"
+      src="${m.url}"
+      title="YouTube video player"
+      frameborder="0"
+      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+      referrerpolicy="strict-origin-when-cross-origin"
+      allowfullscreen
+      ></iframe>
+      </div>
+    <div class="about">
+    ${m.description}
+    </div>
+    <ion-icon class=favourite-icon name="${
+      m.isFavorite === true ? "heart" : "heart-outline"
+    }"></ion-icon>
+      </div> */
     function uploadBreadcrumbs() {
       headerEl
         .querySelector(".genre")
@@ -123,11 +151,118 @@ fetch("http://localhost:3000/trailers")
       showNoMoviesMessage(movieInCategory);
     }
 
+    // event object -  e, targetSelector - event targer,  destSelector - selector, where content will be placed, htmlFileName...
+    function uploadHTML(destSelector, htmlFileName) {
+      // Fetch the HTML file using the Fetch API
+      fetch(htmlFileName)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.text();
+        })
+        .then((htmlContent) => {
+          const destEl = document.querySelector(destSelector);
+          destEl.innerHTML = htmlContent;
+        })
+        .catch((error) => {
+          console.error("There was a problem with the fetch operation:", error);
+        });
+    }
+
+    function submitPreview() {
+      // submitData = {
+      //   title: document.getElementById("movie-name").value,
+      //   url: document.getElementById("embedded-url").value,
+      //   year: parseInt(document.getElementById("movie-year").value), // Convert year to a number
+      //   genres: Array.from(
+      //     document.querySelectorAll("input[name='form-genres']:checked")
+      //   ).map((genre) => genre.nextElementSibling.innerText), // Get selected genres
+      //   description: document.getElementById("short-description").value,
+      //   isFavorite: document.getElementById("set-favorite").checked, // true if checkbox is checked, otherwise false
+      // };
+
+      const submitYear = parseInt(document.getElementById("movie-year").value);
+      const submitArr = Array.from(
+        document.querySelectorAll("input[name='form-genres']:checked")
+      ).map((genre) => genre.nextElementSibling.innerText);
+      submitData.title = document.getElementById("movie-name").value ??= "";
+      submitData.url = document.getElementById("embedded-url").value ??= "";
+      submitData.year = submitYear ??= 2001;
+      submitData.genres = submitArr ??= [];
+      submitData.description = document.getElementById(
+        "short-description"
+      ).value ??= "";
+      submitData.isFavorite = document.getElementById(
+        "set-favorite"
+      ).checked ??= false;
+
+      while (sectionTrailersEl.firstChild) {
+        sectionTrailersEl.removeChild(sectionTrailersEl.firstChild);
+      }
+      console.log(submitData.genres);
+      loadContent(submitData);
+
+      const HtmlFinalSubmit = `<div class="final-submit-container">
+        <button type="cancel-submit">Go back</button>
+        <button type="final-submit">Submit</button>
+      </div>`;
+
+      sectionTrailersEl.insertAdjacentHTML("beforeend", HtmlFinalSubmit);
+    }
+
+    function cancelSubmit() {
+      while (sectionTrailersEl.firstChild) {
+        sectionTrailersEl.removeChild(sectionTrailersEl.firstChild);
+      }
+      uploadHTML(".section-trailers", "trailerForm.html");
+      setTimeout(() => {
+        document.getElementById("movie-name").value = submitData.title ?? "";
+        document.getElementById("embedded-url").value = submitData.url ?? "";
+        document.getElementById("movie-year").value = submitData.year ?? 2001;
+        const genreCheckboxes = document.querySelectorAll(
+          "input[name='form-genres']"
+        );
+        genreCheckboxes.forEach((checkbox) => {
+          const genreLabel = checkbox.nextElementSibling.innerText;
+          checkbox.checked = submitData.genres.includes(genreLabel);
+        });
+        document.getElementById("short-description").value =
+          submitData.description ?? "";
+        document.getElementById("set-favorite").checked =
+          submitData.isFavorite ?? false;
+      }, 100);
+    }
+
+    // const currentJSON = JSON.parse(data);
+    function finalSubmit() {
+      const currentData = [...data];
+      const newTrailer = { ...submitData };
+      currentData.push(newTrailer);
+      fetch("http://localhost:3000/trailers", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(currentData),
+      })
+        .then((response) => response.text())
+        .then((data) => console.log(data))
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+
     // EVENT LISTENERS
     sidebarEl.addEventListener("click", (e) => {
       openSubcategory(e);
       filterMovies(e);
     });
+
+    // (maybe for later)
+    // sectionTrailersEl.addEventListener("cilck", (e) => {
+    //   toggleCheckbox("custom-select li");
+    // });
 
     document.addEventListener("click", function (e) {
       if (e.target.classList.contains("favourite-icon")) {
@@ -147,14 +282,50 @@ fetch("http://localhost:3000/trailers")
         });
       }
     });
+
+    document.addEventListener("click", function (e) {
+      const submitButton = document.querySelector(
+        `.form-container button[type="submit"]`
+      );
+      const cancelButton = document.querySelector(
+        `.final-submit-container button[type='cancel-submit']`
+      );
+      const finalSubmitButton = document.querySelector(
+        `.final-submit-container button[type='final-submit']`
+      );
+      const sidebarAddTrailer = document.querySelector(".upload-trailer li");
+
+      switch (e.target) {
+        case submitButton:
+          submitPreview();
+          break;
+
+        case cancelButton:
+          cancelSubmit();
+          break;
+
+        case finalSubmitButton:
+          finalSubmit();
+          break;
+
+        case sidebarAddTrailer:
+          uploadHTML(".section-trailers", "trailerForm.html");
+
+        default:
+          return;
+      }
+      // Any other logic that should run if a button was clicked can go here
+    });
+    // server data access end here
   })
   .catch((error) => {
     console.error("Error fetching trailers:", error);
   });
 // Backlog:
 // functions:
-// trailer upload page (form) (category selection should solve current inconvenience)
+// Implement functionallity to check validity of embed url and also other inputs format (use coalesing asignment operators for that chage to prompt error instead of empty string...)
 // Implement favorite functionality (write to JSON if saved)
+// complete mobile nav
 
 // Next sprints:
 // implement function based on binary search for that object (sort by movie name)
@@ -168,6 +339,8 @@ fetch("http://localhost:3000/trailers")
 // Upload more trailers
 // change Data structure, from JS object to JSON
 // optimize filterContent function (using array for categories and other filters)
+// trailer upload page (form) (category selection should solve current inconvenience)
+// add preview function which opens trailer after pressing 'Submit'
 
 // NOTES:
 // For Favourite to work I would need to create external JSON
